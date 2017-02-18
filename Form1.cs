@@ -13,6 +13,7 @@ namespace XMLParse
 
             var Doc = new XmlDocument();
             Doc.Load("config.xml");
+            
             XmlElement root = Doc.DocumentElement;
 
             var tagsForm = root.GetElementsByTagName("Form");
@@ -20,7 +21,8 @@ namespace XMLParse
             GoThroughAllValues(this, tagsFormElem);
 
             createControl(root.GetElementsByTagName("button"), typeof(Button));
-        }
+            createControl(root.GetElementsByTagName("textbox"), typeof(TextBox));
+            }
 
         private void GoThroughAllValues(Control target, XmlElement xmlElement)
         {
@@ -32,7 +34,7 @@ namespace XMLParse
                 switch (child.Name)
                 {
                     case "name":
-                        target.Name = childValue;
+                        target.Text = childValue;
                         break;
                     case "top":
                         target.Top = int.Parse(childValue);
@@ -62,7 +64,7 @@ namespace XMLParse
                 GoThroughAllValues(control, child);
             }
         }
-
+        
         private Color ParseRGBColor(string rgbStr)
         {
             try
