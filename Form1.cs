@@ -10,8 +10,9 @@ namespace XMLParse
         public Form1()
         {
             InitializeComponent();
-
+             //всю логику нужно выносить в отдельный метод. Здесь только вызывать   
             var Doc = new XmlDocument();
+            //не забывать в таких местах проверять наличие файла перед чтением
             Doc.Load("config.xml");
             
             XmlElement root = Doc.DocumentElement;
@@ -30,7 +31,8 @@ namespace XMLParse
             foreach (XmlElement child in children)
             {
                 var childValue = child.InnerText;
-
+                //Если наш конфиг содержал бы больше настроек этот switch пришлось бы сильно удлинить, что не очень хорошо
+                //doc.Descendants("name") - такой способ достать запись был бы лучше
                 switch (child.Name)
                 {
                     case "name":
@@ -61,6 +63,7 @@ namespace XMLParse
             {
                 var control = Activator.CreateInstance(ControlType) as Control;
                 this.Controls.Add(control);
+                //по хорошему нужно было считать все настройки их хмл где то в одном месте, записать их куда то а потом создавать контролы
                 GoThroughAllValues(control, child);
             }
         }
@@ -69,6 +72,8 @@ namespace XMLParse
         {
             try
             {
+                //здесь лучше использовать TryParse для каждого значения RGB, затем передавать их в FromArgb, 
+                //так читаемость кода будет лучше
                 var rgbParts = rgbStr.Split(new[] {',', ' '}, StringSplitOptions.RemoveEmptyEntries);
                 return Color.FromArgb(int.Parse(rgbParts[0]), int.Parse(rgbParts[1]), int.Parse(rgbParts[2]));
             }
